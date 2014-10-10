@@ -30,7 +30,7 @@
 			(function (delegatedSelector) {
 				var eventCallback = function (event) {
 					var target = event.target || event.srcElement,
-						delegatedNodes = [];
+						delegatedNodes;
 
 					if (target) {
 						if (!event.stopPropagation) {
