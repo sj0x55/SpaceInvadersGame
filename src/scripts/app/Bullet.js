@@ -1,31 +1,18 @@
-define(function () {
+define(['app/Entity'], function (Entity) {
 	var Bullet = function () {
-		this.pointsWidth = 1;
-		this.pointsHeight = 1;
-		this.pointX;
-		this.pointY;
-		this.lastMap = [];
-	};
+		Entity.call(this);
+		
+		this.name = 'bullet';
+		this.width = 5;
+		this.height = 5;
+		this.x = undefined;
+		this.y = undefined;
+	}
+	.extends(Entity);
 
-	Bullet.prototype.setPointPositions = function (pointX, pointY) {
-		this.pointX = parseInt(pointX, 10);
-		this.pointY = parseInt(pointY, 10);
-	};
-
-	Bullet.prototype.calculateMap = function () {
-		if (typeof this.pointX !== 'number' || typeof this.pointY !== 'number') return false;
-
-		this.lastMap = [];
-		for (var i = 0; i < this.pointsWidth; i++) {
-			for (var j = 0; j < this.pointsHeight; j++) {
-				this.lastMap.push([
-					this.pointX + i,
-					this.pointY + j
-				]);
-			}
-		}
-
-		return this.lastMap;
+	Bullet.prototype.move = function () {
+		this.y -= this.moveStepSize;
+		return this;
 	};
 
 	return Bullet;

@@ -6,4 +6,4 @@ requirejs.config({
 	}
 });
 
-require(['app/main']);
+require(['lib/JsFix', 'app/Main']);

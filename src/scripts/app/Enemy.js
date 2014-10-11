@@ -1,34 +1,42 @@
-define(function () {
+define(['app/Entity'], function (Entity) {
 	var Enemy = function () {
-		this.pointsWidth = 2;
-		this.pointsHeight = 1;
-		this.gapX = 1;
-		this.gapY = 1;
-		this.pointX;
-		this.pointY;
+		Entity.call(this);
+
+		this.name = 'enemy';
+		this.width = 40;
+		this.height = 15;
+		this.margin = 30;
+		this.x = undefined;
+		this.y = undefined;
 		this.direction = 'right';
-		this.lastMap = [];
-	};
+	}
+	.extends(Entity);
 
-	Enemy.prototype.setPointMatrixPositions = function (pointX, pointY) {
-		this.pointX = parseInt(pointX, 10);
-		this.pointY = parseInt(pointY, 10);
-	};
+	Enemy.prototype.move = function () {
 
-	Enemy.prototype.calculateMap = function () {
-		if (typeof this.pointX !== 'number' || typeof this.pointY !== 'number') return false;
-
-		this.lastMap = [];
-		for (var i = 0; i < this.pointsWidth; i++) {
-			for (var j = 0; j < this.pointsHeight; j++) {
-				this.lastMap.push([
-					((this.pointX * (this.gapX * 1)) + (this.pointX * (this.pointsWidth))) + this.gapX + i,
-					((this.pointY * (this.gapY * 1)) + (this.pointY * (this.pointsHeight))) + this.gapY + j
-				]);
-			}
+		if (this.direction == 'right') {
+			this.x += this.moveStepSize;
+		}
+		else {
+			this.x -= this.moveStepSize;
 		}
 
-		return this.lastMap;
+		return this;
+	};
+
+	Enemy.prototype.down = function () {
+		this.y += this.height + this.margin;
+
+		return this;
+	};
+
+	Enemy.prototype.revertDirection = function () {
+		if (this.direction === 'right') {
+			this.direction = 'left';
+		}
+		else {
+			this.direction = 'right';
+		}
 	};
 
 	return Enemy;

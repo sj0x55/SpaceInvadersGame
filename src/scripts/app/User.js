@@ -1,32 +1,31 @@
-define(function () {
+define(['app/Entity'], function (Entity) {
 	var User = function () {
-		this.pointsWidth = 2;
-		this.pointsHeight = 1;
-		this.pointX;
-		this.pointY;
-		this.lastMap = [];
-	};
+		Entity.call(this);
+		
+		this.name = 'user';
+		this.width = 60;
+		this.height = 20;
+		this.x = undefined;
+		this.y = undefined;
+		this.activeDirection = undefined;
+	}
+	.extends(Entity);
 
-	User.prototype.setPointPositions = function (pointX, pointY) {
-		this.pointX = parseInt(pointX, 10);
-		this.pointY = parseInt(pointY, 10);
-	};
-
-	User.prototype.calculateMap = function () {
-		if (typeof this.pointX !== 'number' || typeof this.pointY !== 'number') return false;
-
-		this.lastMap = [];
-		for (var i = 0; i < this.pointsWidth; i++) {
-			for (var j = 0; j < this.pointsHeight; j++) {
-				this.lastMap.push([
-					this.pointX + i,
-					this.pointY + j
-				]);
+	User.prototype.move = function (maxX) {
+		if (this.activeDirection === 'left') {
+			if (this.x >= this.moveStepSize) {
+				this.x -= this.moveStepSize;
+			}
+		}
+		else if (this.activeDirection === 'right') {
+			if (this.x <= maxX - this.width - this.moveStepSize) {
+				this.x += this.moveStepSize;
 			}
 		}
 
-		return this.lastMap;
+		return this;
 	};
+
 
 	return User;
 });

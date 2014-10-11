@@ -14,12 +14,9 @@ gulp.task('sass', function () {
         .pipe(gulp.dest('./src/styles/css'));
 });
 
-gulp.task('default', ['jshint', 'sass'], function() {
-	gulp.watch('./src/scripts/**/*.js', function() {
-		gulp.run('jshint');
-	});
-
-	gulp.watch('./src/styles/scss/**/*.scss', function() {
-		gulp.run('sass');
-	});
+gulp.task('watch', function() {
+	gulp.watch(['./src/scripts/**/*.js'], ['jshint']);
+	gulp.watch(['./src/styles/scss/**/*.scss'], ['sass']);
 });
+
+gulp.task('default', ['watch', 'jshint', 'sass']);

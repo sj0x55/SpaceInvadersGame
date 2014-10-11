@@ -1,0 +1,25 @@
+body {
+  background: #EEE; }
+
+#main-container {
+  position: relative;
+  border: 2px dashed #AAA;
+  margin: 0 auto; }
+  #main-container .entity {
+    position: absolute; }
+    #main-container .entity.enemy {
+      background: red; }
+    #main-container .entity.user {
+      background: blue; }
+    #main-container .entity.bullet {
+      background: black; }
+  #main-container .game-over {
+    position: absolute;
+    top: 50%;
+    margin-top: -50px;
+    background: black;
+    width: 100%;
+    line-height: 100px;
+    font-size: 40px;
+    text-align: center;
+    color: white; }
