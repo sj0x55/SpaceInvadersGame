@@ -1,7 +1,7 @@
 define(['app/Entity'], function (Entity) {
 	var User = function () {
 		Entity.call(this);
-		
+
 		this.name = 'user';
 		this.width = 60;
 		this.height = 20;
@@ -25,7 +25,6 @@ define(['app/Entity'], function (Entity) {
 
 		return this;
 	};
-
 
 	return User;
 });

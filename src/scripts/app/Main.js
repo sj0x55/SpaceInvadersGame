@@ -6,7 +6,7 @@ define(['lib/Events', 'app/Board', 'app/Bullet'], function(Events, Board, Bullet
 
 	board.setEnemiesMap([
 		[1,1,1,0,1,1,1],
-		[1,1,1,0,1,1,1]
+		[1,1,0,0,0,1,1]
 	]);
 
 	board.draw();
