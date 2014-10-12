@@ -44,7 +44,7 @@ define(['lib/Events', 'app/Board', 'app/Bullet'], function(Events, Board, Bullet
 			enemiesLoop = setTimeout(enemiesFunc, enemiesSpeed);
 		},
 		bulletsLoop,
-		bulletsSpeed = 20,
+		bulletsSpeed = 50,
 		bulletsFunc = function() {
 			board.moveBullets();
 			bulletsLoop = setTimeout(bulletsFunc, bulletsSpeed);

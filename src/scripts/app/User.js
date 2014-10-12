@@ -3,8 +3,8 @@ define(['app/Entity'], function (Entity) {
 		Entity.call(this);
 
 		this.name = 'user';
-		this.width = 60;
-		this.height = 20;
+		this.width = 40;
+		this.height = 30;
 		this.x = undefined;
 		this.y = undefined;
 		this.activeDirection = undefined;

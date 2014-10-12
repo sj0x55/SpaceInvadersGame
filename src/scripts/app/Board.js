@@ -135,11 +135,8 @@ define(['app/Enemy', 'app/User', 'app/Bullet', 'lib/Events', 'lib/Utils'], funct
 			secondLoop:
 			for (j = 0; j < enemiesLength; j++) {
 				if (this.enemies[j] && this.bullets[i] && this.enemies[j].contain(this.bullets[i].x, this.bullets[i].y)) {
-					this.bullets[i].remove();
-					this.enemies[j].remove();
-
-					this.bullets.splice(i, 1);
-					this.enemies.splice(j, 1);
+					this.removeBullet(i);
+					this.removeEnemy(j);
 
 					if (--enemiesLength === 0) {
 						this.isEndOfGame = true;
@@ -158,6 +155,16 @@ define(['app/Enemy', 'app/User', 'app/Bullet', 'lib/Events', 'lib/Utils'], funct
 				}
 			}
 		}
+	};
+
+	Board.prototype.removeBullet = function (index) {
+		this.bullets[index].remove();
+		this.bullets.splice(index, 1);
+	};
+
+	Board.prototype.removeEnemy = function (index) {
+		this.enemies[index].remove();
+		this.enemies.splice(index, 1);
 	};
 
 	Board.prototype.moveUser = function () {
