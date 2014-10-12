@@ -1,5 +1,7 @@
 define(['app/Enemy', 'app/User', 'app/Bullet', 'lib/Events', 'lib/Utils'], function (Enemy, User, Bullet, Events, Utils) {
-	var Board = function (config) {
+	var
+	KEYS = { SPACE: 32, LEFT: 37, RIGHT: 39 },
+	Board = function (config) {
 		this.target = config.target;
 
 		this.width = config.width || window.innerWidth - 60;
@@ -39,7 +41,7 @@ define(['app/Enemy', 'app/User', 'app/Bullet', 'lib/Events', 'lib/Utils'], funct
 		Events.on('keyup', document, function (e) {
 			var bullet;
 
-			if (e.keyCode == 32) {
+			if (e.keyCode == KEYS.SPACE) {
 				if (that.bullets.length < 3) {
 					bullet = new Bullet();
 					that.bullets.push(
@@ -47,17 +49,17 @@ define(['app/Enemy', 'app/User', 'app/Bullet', 'lib/Events', 'lib/Utils'], funct
 					);
 				}
 			}
-			else if (e.keyCode == 37 || e.keyCode == 39) {
+			else if (e.keyCode == KEYS.LEFT || e.keyCode == KEYS.RIGHT) {
 				that.user.activeDirection = undefined;
 			}
 		});
 
 		Events.on('keydown', document, function (e) {
 			if (!that.user.activeDirection) {
-				if (e.keyCode == 37) {	// left
+				if (e.keyCode == KEYS.LEFT) {
 					that.user.activeDirection = 'left';
 				}
-				else if (e.keyCode == 39) {	// right
+				else if (e.keyCode == KEYS.RIGHT) {
 					that.user.activeDirection = 'right';
 				}
 			}
