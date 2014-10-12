@@ -1,1 +1,1 @@
-![alt text](https://raw.githubusercontent.com/sjanczewski/SpaceInvadersGame/master/screenshot.jpg "Screenshot1")
+![Screenshot1](https://raw.githubusercontent.com/sjanczewski/SpaceInvadersGame/master/screenshot.jpg "SpaceInvadersGame")
