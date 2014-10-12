@@ -30,6 +30,14 @@ define(['app/Entity'], function (Entity) {
 		return this;
 	};
 
+	Enemy.prototype.contain = function (x, y) {
+		if ((x >= this.x && x <= (this.x + this.width)) && (y >= this.y && y <= (this.y + this.height))) {
+			return true;
+		}
+
+		return false;
+	};
+
 	Enemy.prototype.revertDirection = function () {
 		if (this.direction === 'right') {
 			this.direction = 'left';

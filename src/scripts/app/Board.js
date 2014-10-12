@@ -1,12 +1,12 @@
-define(['app/Enemy', 'app/User', 'app/Bullet', 'lib/Events'], function (Enemy, User, Bullet, Events) {
+define(['app/Enemy', 'app/User', 'app/Bullet', 'lib/Events', 'lib/Utils'], function (Enemy, User, Bullet, Events, Utils) {
 	var Board = function (config) {
 		this.target = config.target;
 
-		this.width = config.width || 800;
-		this.height = config.height || 400;
+		this.width = config.width || window.innerWidth - 60;
+		this.height = config.height || window.innerHeight - 60;
 		this.segmentSize = 10;
-		this.gameOver = false;
-
+		this.isGameOver = false;
+		this.isEndOfGame = false;
 
 		this.enemies = [];
 		this.bullets = [];
@@ -40,10 +40,12 @@ define(['app/Enemy', 'app/User', 'app/Bullet', 'lib/Events'], function (Enemy, U
 			var bullet;
 
 			if (e.keyCode == 32) {
-				bullet = new Bullet();
-				that.bullets.push(
-					bullet.setPosition(that.user.x + (that.user.width / 2 - bullet.width / 2), that.user.y)
-				);
+				if (that.bullets.length < 3) {
+					bullet = new Bullet();
+					that.bullets.push(
+						bullet.setPosition(that.user.x + (that.user.width / 2 - bullet.width / 2), that.user.y)
+					);
+				}
 			}
 			else if (e.keyCode == 37 || e.keyCode == 39) {
 				that.user.activeDirection = undefined;
@@ -82,8 +84,17 @@ define(['app/Enemy', 'app/User', 'app/Bullet', 'lib/Events'], function (Enemy, U
 	};
 
 	Board.prototype.downEnemies = function () {
-		for (var i = 0, len = this.enemies.length; i < len; i++) {
-			this.enemies[i].down();
+		var enemy, i, len;
+		for (i = 0, len = this.enemies.length; i < len; i++) {
+			if (this.enemies[i]) {
+				enemy = this.enemies[i];
+				enemy.down();
+
+				if (enemy.y + enemy.height >= this.height) {
+					this.isGameOver = true;
+					break;
+				}
+			}
 		}
 	};
 
@@ -91,31 +102,61 @@ define(['app/Enemy', 'app/User', 'app/Bullet', 'lib/Events'], function (Enemy, U
 		var enemy, revertDirection = false, i, len;
 
 		for (i = 0, len = this.enemies.length; i < len; i++) {
-			enemy = this.enemies[i];
-			detected = false;
+			if (this.enemies[i]) {
+				enemy = this.enemies[i];
+				detected = false;
 
-			if (
-				((enemy.x + enemy.width + enemy.margin >= (this.width - enemy.margin)) && enemy.direction === 'right') ||
-				((enemy.x - enemy.margin <= enemy.margin) && enemy.direction === 'left')
-			) {
-				revertDirection = true;
-				break;
+				if (
+					((enemy.x + enemy.width + enemy.margin >= (this.width - enemy.margin)) && enemy.direction === 'right') ||
+					((enemy.x - enemy.margin <= enemy.margin) && enemy.direction === 'left')
+				) {
+					revertDirection = true;
+					break;
+				}
 			}
 		}
 
-
 		for (i = 0, len = this.enemies.length; i < len; i++) {
-			if (revertDirection) {
-				this.enemies[i].revertDirection();
-			}
+			if (this.enemies[i]) {
+				if (revertDirection) {
+					this.enemies[i].revertDirection();
+				}
 
-			this.enemies[i].move();
+				this.enemies[i].move();
+			}
 		}
 	};
 
 	Board.prototype.moveBullets = function () {
-		for (var i = 0, len = this.bullets.length; i < len; i++) {
-			this.bullets[i].move();
+		var enemiesLength = this.enemies.length, i, len, j;
+
+		mainLoop:
+		for (i = 0, len = this.bullets.length; i < len; i++) {
+			secondLoop:
+			for (j = 0; j < enemiesLength; j++) {
+				if (this.enemies[j] && this.bullets[i] && this.enemies[j].contain(this.bullets[i].x, this.bullets[i].y)) {
+					this.bullets[i].remove();
+					this.enemies[j].remove();
+
+					this.bullets.splice(i, 1);
+					this.enemies.splice(j, 1);
+
+					if (--enemiesLength === 0) {
+						this.isEndOfGame = true;
+						break mainLoop;
+					}
+
+					continue secondLoop;
+				}
+			}
+
+			if (this.bullets[i]) {
+				this.bullets[i].move();
+
+				if (this.bullets[i].y <= 0) {
+					this.bullets.splice(i, 1);
+				}
+			}
 		}
 	};
 
@@ -129,25 +170,28 @@ define(['app/Enemy', 'app/User', 'app/Bullet', 'lib/Events'], function (Enemy, U
 		this.map = [];
 
 		for (i = 0, len = this.enemies.length; i < len; i++) {
-			html.push(that.enemies[i].html());
+			if (that.enemies[i]) {
+				html.push(that.enemies[i].html());
+			}
 		}
 
 		for (i = 0, len = this.bullets.length; i < len; i++) {
-			html.push(that.bullets[i].html());
+			if (that.bullets[i]) {
+				html.push(that.bullets[i].html());
+			}
 		} 
 
 		html.push(that.user.html());
 
 		this.target.innerHTML = html.join('');
 	};
-
-	
-	Board.prototype.isGameOver = function () {
-		return this.gameOver;
-	};
 	
 	Board.prototype.showGameOver = function () {
 		this.target.innerHTML = '<div class="game-over">Game Over</div>';
+	};
+	
+	Board.prototype.showEndOfGame = function () {
+		this.target.innerHTML = '<div class="end-of-game">You Win!</div>';
 	};
 
 	return Board;

@@ -5,8 +5,9 @@ define(['lib/Events', 'app/Board', 'app/Bullet'], function(Events, Board, Bullet
 		});
 
 	board.setEnemiesMap([
-		[1,1,1,0,1,1,1],
-		[1,1,0,0,0,1,1]
+		[1,1,1,0,1,1,1,0,1,1,1],
+		[1,1,1,0,1,1,1,0,1,1,1],
+		[1,1,1,0,1,1,1,0,1,1,1],
 	]);
 
 	board.draw();
@@ -15,19 +16,22 @@ define(['lib/Events', 'app/Board', 'app/Bullet'], function(Events, Board, Bullet
 		gameIterations = 0,
 		gameSpeed = 50,
 		gameFunc = function() {
-			if (!board.isGameOver()) {
-				board.draw();
-				gameLoop = setTimeout(gameFunc, gameSpeed);
+			if (board.isEndOfGame) {
+				board.showEndOfGame();
+			}
+			else if (board.isGameOver) {
+				board.showGameOver();
 			}
 			else {
-				board.showGameOver();
+				board.draw();
+				gameLoop = setTimeout(gameFunc, gameSpeed);
 			}
 		},
 		enemiesLoop,
 		enemiesIterations = 0,
 		enemiesSpeed = 1000,
 		enemiesFunc = function() {
-			if (enemiesIterations++ >= 20) {
+			if (enemiesIterations++ >= 10) {
 				enemiesIterations = 0;
 				board.downEnemies();
 
@@ -40,13 +44,13 @@ define(['lib/Events', 'app/Board', 'app/Bullet'], function(Events, Board, Bullet
 			enemiesLoop = setTimeout(enemiesFunc, enemiesSpeed);
 		},
 		bulletsLoop,
-		bulletsSpeed = 100,
+		bulletsSpeed = 20,
 		bulletsFunc = function() {
 			board.moveBullets();
 			bulletsLoop = setTimeout(bulletsFunc, bulletsSpeed);
 		},
 		userLoop,
-		userSpeed = 100,
+		userSpeed = 50,
 		userFunc = function() {
 			board.moveUser();
 			userLoop = setTimeout(userFunc, userSpeed);

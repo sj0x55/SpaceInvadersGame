@@ -7,6 +7,7 @@ define(['app/Entity'], function (Entity) {
 		this.height = 5;
 		this.x = undefined;
 		this.y = undefined;
+		this.moveStepSize = 5;
 	}
 	.extends(Entity);
 
